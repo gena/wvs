@@ -3,21 +3,43 @@ body {
   padding: 0;
   margin: 0;
 }
-#app .container {
-  /* align all items below eachother */
+
+.container {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
+  display: inline-block;
+  margin: 10px;
 }
-#app .container .row {
-  /* all items in a row */
+
+.container .row {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
 }
+
+.container .column {
+  display: flex;
+  flex-direction: column;
+  margin: 0.3em;
+}
+
+#controls {
+  border-width: 1px;
+  border-style: solid;
+  padding: 0.5em;
+}
+
+#controls p {
+  margin-left: 0.5em;
+  width: 5em;
+}
+
 #app video {
-  width: 64px;
-  height: 64px;
+  width: 128px;
+  height: 128px;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 .debug .out-of-sync {
   border: 3px solid red;

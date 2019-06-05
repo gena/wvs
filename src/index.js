@@ -10,19 +10,27 @@ class VideoSystem {
     this.drifts = []
     this.throttle = 200 // in ms
     this.fixedDrift = 0
+    this.fps = 25
 
     // Register sync loop?
     // requestAnimationFrame
     // setInterval?
   }
+
   sync(t) {
     // loop  over all the videos and keep them in sync with the main video
     let deltaSync = t - this.lastSync
+
     // If we synced less than 1 second ago, don't sync
     if (deltaSync < this.throttle) {
       return
     }
+
     let first = this.videos[0]
+
+    if (this.onTimeChangeCallback) {
+      this.onTimeChangeCallback(first.currentTime)
+    }
 
     if (first.duration - first.currentTime < this.maxDrift) {
       return
@@ -58,6 +66,7 @@ class VideoSystem {
     this.lastSync = t
     this.setClasses()
   }
+
   setClasses() {
     let first = this.videos[0]
     // The first element is the 'master' element
@@ -84,10 +93,24 @@ class VideoSystem {
       }
     })
   }
+
   play() {
+    if (!this.videos[0].paused) {
+      return
+    }
+
     this.videos.forEach(v => {
-      // do we play all or just the first?
       v.play()
+    })
+  }
+
+  pause() {
+    if (this.videos[0].paused) {
+      return
+    }
+
+    this.videos.forEach(v => {
+      v.pause()
     })
   }
 
@@ -99,19 +122,20 @@ class VideoSystem {
       // sync now
       this.sync(t)
     }
+
     // start the sync loop
     doSync()
   }
 
-  pause() {
-    this.videos.forEach(v => {
-      // do we play all or just the first?
-      v.pause()
-    })
-  }
   setTime(t) {
     this.videos.forEach(v => {
       v.currentTime = t
+    })
+  }
+
+  setFrame(frame) {
+    this.videos.forEach(v => {
+      v.currentTime = (frame - 1) / this.fps + 0.01
     })
   }
 
@@ -120,21 +144,43 @@ class VideoSystem {
       v.playbackRate = speed
     })
   }
+
+  onTimeChange(cb) {
+    this.onTimeChangeCallback = cb
+  }
 }
 
-let slider = document.getElementById('slider')
-slider.addEventListener('input', () => {
-  videoSystem.setSpeed(slider.value)
+let videoSystem = new VideoSystem('#app video')
+
+let sliderSpeed = document.getElementById('speed-slider')
+let valueSpeed = document.getElementById('speed-value')
+sliderSpeed.addEventListener('input', e => {
+  valueSpeed.innerText = parseFloat(e.target.value).toFixed(1) + 'x'
+  videoSystem.setSpeed(e.target.value)
 })
 
-let maxDriftSlider = document.getElementById('max-drift')
-maxDriftSlider.addEventListener('change', evt => {
-  videoSystem.maxDrift = evt.target.value
+let sliderMaxDrift = document.getElementById('max-drift-slider')
+let valueMaxDrift = document.getElementById('max-drift-value')
+sliderMaxDrift.addEventListener('input', e => {
+  videoSystem.maxDrift = e.target.value
+  valueMaxDrift.innerText = e.target.value + ' sec'
 })
 
-let debugCheckbox = document.getElementById('debug')
+let sliderFrame = document.getElementById('frame-slider')
+let valueFrame = document.getElementById('frame-value')
+videoSystem.onTimeChange(t => {
+  let frame = Math.floor(t * videoSystem.fps + 1)
+  valueFrame.innerText = frame
+  sliderFrame.value = frame
+})
+
+sliderFrame.addEventListener('input', e => {
+  videoSystem.setFrame(e.target.value)
+  valueFrame.innerText = e.target.value
+})
+
+let debugCheckbox = document.getElementById('debug-checkbox')
 debugCheckbox.addEventListener('change', evt => {
-  console.log('debug', evt.target.value)
   let app = document.getElementById('app')
   if (evt.target.checked) {
     app.classList.add('debug')
@@ -143,7 +189,17 @@ debugCheckbox.addEventListener('change', evt => {
   }
 })
 
-let videoSystem = new VideoSystem('#app video')
+let playCheckbox = document.getElementById('play-checkbox')
+playCheckbox.addEventListener('change', evt => {
+  if (evt.target.checked) {
+    videoSystem.play()
+  } else {
+    videoSystem.pause()
+  }
+})
+
+videoSystem.setSpeed(0.2)
+
 videoSystem.fixedDrift = 0.04
 videoSystem.play()
 // videoSystem.syncLoop()
@@ -152,5 +208,6 @@ videoSystem.play()
 // setTimeout(() => videoSystem.sync(), 3000)
 
 videoSystem.syncLoop()
-setTimeout(() => console.log(videoSystem.drifts), 3000)
-setTimeout(() => console.log(videoSystem.drifts), 8000)
+
+// setTimeout(() => console.log(videoSystem.drifts), 3000)
+// setTimeout(() => console.log(videoSystem.drifts), 8000)

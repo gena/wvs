@@ -9,55 +9,105 @@
     <div id="app" class="debug">
       <div class="container">
         <div class="row">
-          <video src="assets/0/0.mp4" controls loop preload="auto"></video>
-          <video src="assets/1/0.mp4" loop preload="auto"></video>
-          <video src="assets/2/0.mp4" loop preload="auto"></video>
-          <video src="assets/3/0.mp4" loop preload="auto"></video>
-        </div>
-        <div class="row">
-          <video src="assets/0/1.mp4" loop preload="auto"></video>
-          <video src="assets/1/1.mp4" loop preload="auto"></video>
-          <video src="assets/2/1.mp4" loop preload="auto"></video>
-          <video src="assets/3/1.mp4" loop preload="auto"></video>
-        </div>
-        <div class="row">
-          <video src="assets/0/2.mp4" loop preload="auto"></video>
-          <video src="assets/1/2.mp4" loop preload="auto"></video>
-          <video src="assets/2/2.mp4" loop preload="auto"></video>
-          <video src="assets/3/2.mp4" loop preload="auto"></video>
-        </div>
-        <div class="row">
-          <video src="assets/0/3.mp4" loop preload="auto"></video>
-          <video src="assets/2/3.mp4" loop preload="auto"></video>
-          <video src="assets/2/3.mp4" loop preload="auto"></video>
-          <video src="assets/3/3.mp4" loop preload="auto"></video>
+          <div class="column">
+            <div class="row">
+              <video src="assets/0/0.mp4" loop preload="auto"></video>
+              <video src="assets/1/0.mp4" loop preload="auto"></video>
+              <video src="assets/2/0.mp4" loop preload="auto"></video>
+              <video src="assets/3/0.mp4" loop preload="auto"></video>
+            </div>
+            <div class="row">
+              <video src="assets/0/1.mp4" loop preload="auto"></video>
+              <video src="assets/1/1.mp4" loop preload="auto"></video>
+              <video src="assets/2/1.mp4" loop preload="auto"></video>
+              <video src="assets/3/1.mp4" loop preload="auto"></video>
+            </div>
+            <div class="row">
+              <video src="assets/0/2.mp4" loop preload="auto"></video>
+              <video src="assets/1/2.mp4" loop preload="auto"></video>
+              <video src="assets/2/2.mp4" loop preload="auto"></video>
+              <video src="assets/3/2.mp4" loop preload="auto"></video>
+            </div>
+            <div class="row">
+              <video src="assets/0/3.mp4" loop preload="auto"></video>
+              <video src="assets/2/3.mp4" loop preload="auto"></video>
+              <video src="assets/2/3.mp4" loop preload="auto"></video>
+              <video src="assets/3/3.mp4" loop preload="auto"></video>
+            </div>
+          </div>
+          <div class="column">
+            <div id="controls" class="container">
+              <!-- speed -->
+              <div>Speed</div>
+              <div class="row">
+                <input
+                  id="speed-slider"
+                  title="slider"
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.1"
+                  value="0.2"
+                />
+                <p id="speed-value">0.2x</p>
+              </div>
+
+              <!-- maximum allowed delay between video's before they are out-of-sync -->
+              <div>Maximum drift</div>
+              <div class="row">
+                <input
+                  id="max-drift-slider"
+                  title="max drift"
+                  type="range"
+                  min="0"
+                  max="0.25"
+                  step="0.005"
+                  value="0.25"
+                />
+                <p id="max-drift-value">0.25 sec</p>
+              </div>
+
+              <div>Frame</div>
+              <div class="row">
+                <input
+                  id="frame-slider"
+                  title="Current time"
+                  type="range"
+                  min="1"
+                  max="25"
+                  step="1"
+                  value="1"
+                />
+                <p id="frame-value">0</p>
+              </div>
+
+              <div class="row">
+                <div class="column">
+                  <div>Debug</div>
+                  <input
+                    type="checkbox"
+                    id="debug-checkbox"
+                    title="debug"
+                    checked
+                    name="debug"
+                  />
+                </div>
+                <div class="column">
+                  <div>Play</div>
+                  <input
+                    type="checkbox"
+                    id="play-checkbox"
+                    title="play"
+                    checked
+                    name="play"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div id="message"></div>
-
-    <!-- speed -->
-    <input
-      title="slider"
-      type="range"
-      min="0"
-      max="5"
-      step="0.01"
-      value="1"
-      id="slider"
-    />
-
-    <!-- maximum allowed delay between video's before they are out-of-sync -->
-    <input
-      title="max drift"
-      type="range"
-      min="0"
-      max="0.1"
-      step="0.01"
-      value="0.1"
-      id="max-drift"
-    />
-    <input type="checkbox" id="debug" title="debug" checked name="debug" />
 
     <script src="src/index.js"></script>
   </body>
