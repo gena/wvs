@@ -200,7 +200,7 @@ playCheckbox.addEventListener('change', evt => {
 
 videoSystem.setSpeed(sliderSpeed.value)
 
-videoSystem.fixedDrift = 0.04
+videoSystem.fixedDrift = 0.0
 videoSystem.play()
 // videoSystem.syncLoop()
 // setTimeout(() => videoSystem.sync(), 1000)
