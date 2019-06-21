@@ -23,45 +23,57 @@ class VideoSystem {
 
     // If we synced less than 1 second ago, don't sync
     if (deltaSync < this.throttle) {
-      return
+      return // TODO: switch to _.throttle
     }
 
     let first = this.videos[0]
+    let firstTime = first.currentTime
 
     if (this.onTimeChangeCallback) {
-      this.onTimeChangeCallback(first.currentTime)
+      this.onTimeChangeCallback(firstTime)
     }
 
-    if (first.duration - first.currentTime < this.maxDrift) {
-      return
-    }
+    // if (first.duration - firstTime < this.maxDrift) {
+    //   return
+    // }
+
     // sync all status of videos to first
     let drifts = []
     this.videos.forEach(other => {
+      // compute and remember drift
       let drift = other.currentTime - first.currentTime
       drifts.push(drift)
+
+      // don't sync yourself
       if (first === other) {
-        // don't sync yourself
         return
       }
+
+      // play other
       if (!first.paused && other.paused) {
-        // it should have been started
         other.play()
       }
+
+      // pause other
       if (first.paused && !other.paused) {
-        // it should have paused
         other.pause()
       }
     })
 
+    // update time if it is above threshold
     this.videos.forEach((other, i) => {
       // TODO don't sync near end of the video
       let drift = drifts[i]
       if (drift > this.maxDrift) {
         //  TODO: add robust drift estimate and add it here.
         other.currentTime = first.currentTime
+        console.log('Undrift ' + i + ' ' + drift)
+
+        // TODO: update drifts when video.currentTime is updated
+        // TODO: how to check if video.currentTime actually worked when playing?
       }
     })
+
     this.drifts = drifts
     this.lastSync = t
     this.setClasses()
@@ -111,6 +123,11 @@ class VideoSystem {
 
     this.videos.forEach(v => {
       v.pause()
+    })
+
+    // force time
+    this.videos.forEach(v => {
+      v.currentTime = this.videos[0].currentTime
     })
   }
 
@@ -204,8 +221,8 @@ videoSystem.setSpeed(sliderSpeed.value)
 
 videoSystem.play()
 // videoSystem.syncLoop()
-// setTimeout(() => videoSystem.sync(), 500)
-setTimeout(() => videoSystem.sync(), 1000)
+setTimeout(() => videoSystem.sync(), 500)
+// setTimeout(() => videoSystem.sync(), 1000)
 // setTimeout(() => videoSystem.sync(), 2000)
 // setTimeout(() => videoSystem.sync(), 3000)
 
