@@ -10,7 +10,6 @@ class VideoSystem {
     this.lastSync = 0 // in ms
     this.drifts = []
     this.throttle = 100 // in ms
-    this.fixedDrift = 0
     this.fps = 10
 
     // Register sync loop?
@@ -60,7 +59,7 @@ class VideoSystem {
       let drift = drifts[i]
       if (drift > this.maxDrift) {
         //  TODO: add robust drift estimate and add it here.
-        other.currentTime = first.currentTime + this.fixedDrift
+        other.currentTime = first.currentTime
       }
     })
     this.drifts = drifts
@@ -203,10 +202,10 @@ playCheckbox.addEventListener('change', evt => {
 
 videoSystem.setSpeed(sliderSpeed.value)
 
-videoSystem.fixedDrift = 0.0
 videoSystem.play()
 // videoSystem.syncLoop()
-// setTimeout(() => videoSystem.sync(), 1000)
+// setTimeout(() => videoSystem.sync(), 500)
+setTimeout(() => videoSystem.sync(), 1000)
 // setTimeout(() => videoSystem.sync(), 2000)
 // setTimeout(() => videoSystem.sync(), 3000)
 
