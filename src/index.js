@@ -5,7 +5,7 @@ var _ = require('lodash')
 
 let videoSystem = new VideoSystem('#app video')
 
-videoSystem.on('sync', event => {
+videoSystem.on('timeupdate', event => {
   setClasses(videoSystem)
   // Store measurment info.
 })
