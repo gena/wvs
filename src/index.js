@@ -1,6 +1,8 @@
 import './styles.css'
 import { VideoSystem, setClasses } from './video-system'
-console.log('Video', VideoSystem)
+// TODO: use proper imports
+var _ = require('lodash')
+
 let videoSystem = new VideoSystem('#app video')
 
 videoSystem.on('sync', event => {
@@ -30,10 +32,12 @@ videoSystem.onTimeChange(t => {
   sliderFrame.value = frame
 })
 
-sliderFrame.addEventListener('input', e => {
+let onCurrentFrameSlide = _.throttle(function(e) {
   videoSystem.setFrame(e.target.value)
   valueFrame.innerText = e.target.value
-})
+}, 150)
+
+sliderFrame.addEventListener('input', e => onCurrentFrameSlide(e))
 
 let app = document.getElementById('app')
 let debugCheckbox = document.getElementById('debug-checkbox')
@@ -58,6 +62,7 @@ videoSystem.setSpeed(sliderSpeed.value)
 
 videoSystem.play()
 // videoSystem.syncLoop()
+setTimeout(() => videoSystem.sync(), 500)
 // setTimeout(() => videoSystem.sync(), 1000)
 // setTimeout(() => videoSystem.sync(), 2000)
 // setTimeout(() => videoSystem.sync(), 3000)
@@ -67,3 +72,15 @@ app.classList.remove('debug')
 
 // setTimeout(() => console.log(videoSystem.drifts), 3000)
 // setTimeout(() => console.log(videoSystem.drifts), 8000)
+
+document.body.onkeyup = function(e) {
+  if (e.keyCode === 32) {
+    if (playCheckbox.checked) {
+      playCheckbox.checked = false
+      videoSystem.pause()
+    } else {
+      playCheckbox.checked = true
+      videoSystem.play()
+    }
+  }
+}
