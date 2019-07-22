@@ -1,12 +1,34 @@
 import './styles.css'
 import { VideoSystem, setClasses } from './video-system'
-// TODO: use proper imports
-var _ = require('lodash')
+import * as _ from 'lodash'
 
+import { init } from 'echarts'
 let videoSystem = new VideoSystem('#app video')
 
+let chartElement = document.getElementById('echart')
+let chart = init(chartElement)
+console.log('chart', chart)
+let options = {
+  animation: false,
+  xAxis: {},
+  yAxis: {},
+  series: []
+}
+window.chart = chart
+chart.setOption(options)
 videoSystem.on('timeupdate', event => {
   setClasses(videoSystem)
+  let series = event.detail.drifts.map((drift, i) => {
+    let data = _.get(options.series, [i, 'data'], [])
+    data.push([data.length, drift])
+    return {
+      type: 'line',
+      data: data
+    }
+  })
+  options.series = series
+
+  chart.setOption({ series: series })
   // Store measurment info.
 })
 

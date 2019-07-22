@@ -35,10 +35,15 @@ body {
 }
 
 #app video {
-  width: 128px;
-  height: 128px;
+  width: 52px;
+  height: 52px;
   image-rendering: crisp-edges;
   image-rendering: pixelated;
+}
+
+#app #echart {
+  width: 300px;
+  height: 200px;
 }
 
 .debug .out-of-sync {

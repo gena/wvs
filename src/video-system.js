@@ -66,9 +66,11 @@ class VideoSystem {
     this.drifts = drifts
     this.lastSync = t
     let event = new CustomEvent('timeupdate', {
-      videos: this.videos,
-      drifts,
-      currentTimes
+      detail: {
+        videos: this.videos,
+        drifts,
+        currentTimes
+      }
     })
     this.el.dispatchEvent(event)
   }
