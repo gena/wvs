@@ -104,7 +104,6 @@ export default {
 }
 #map canvas {
   border: 1px solid red;
-  z-index: 1000;
 }
 #map .leaflet-interactive .leaflet-tile-container {
   pointer-events: initial;
